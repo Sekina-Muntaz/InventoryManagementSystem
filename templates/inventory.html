@@ -1,0 +1,256 @@
+{%extends 'base.html'%}
+{% block title %}
+INVENTORIES
+
+{% endblock%}
+
+{% block content%}
+<div class="container">
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addInventoryModal" style="margin-top: 30px;">
+    Add new Inventory
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="addInventoryModal" tabindex="-1" role="dialog" aria-labelledby="addInventoryModal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addInventoryModalLabel">Add new inventory</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <!-- add inventory table -->
+        <div class="modal-body">
+
+          <form>
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" id="name">
+
+            </div>
+            <div class="form-group">
+              <label for="type">Type</label>
+              <select class="form-control" id="type">
+                <option>Product</option>
+                <option>Service</option>
+
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="buyingPrice">Buying Price</label>
+              <input type="password" class="form-control" id="buyingPrice">
+            </div>
+            <div class="form-group">
+              <label for="sellingPrice">Selling Price</label>
+              <input type="password" class="form-control" id="sellingPrice">
+            </div>
+
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- creating table  -->
+<div style="margin-top: 30px;">
+  <table class="table" id="invTable">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">NAME</th>
+        <th scope="col">TYPE</th>
+        <th scope="col">BUYING PRICE</th>
+        <th scope="col">SELLING PRICE</th>
+        <th scope="col">STOCK</th>
+        <th scope="col">ACTION</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- sample row -->
+      <tr>
+        <th scope="row">1</th>
+        <td>Bread</td>
+        <td>Product</td>
+        <td>45.00</td>
+        <td>50.00</td>
+        <td> 40</td>
+        <!-- actions -->
+        <td>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#stock">
+            Add Stock
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="stock" tabindex="-1" role="dialog" aria-labelledby="stock" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="stockLabel">Modal title</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="stock">Stock</label>
+                      <input type="text" class="form-control" id="stock" placeholder="Enter Stock">
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
+                  <button type="button" class="btn btn-primary">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSale">
+            Add Sale
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="addSale" tabindex="-1" role="dialog" aria-labelledby="addSaleLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addSaleModalLabel">Add Sale</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="addInventory">Quantity</label>
+                      <input type="number" class="form-control" id="addInventory" placeholder="Enter Quantity">
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
+                  <button type="button" class="btn btn-primary">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#viewSale">
+            View Sale
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="viewSale" tabindex="-1" role="dialog" aria-labelledby="viewSaleLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="viewSaleModalLabel">View Sale</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <table class='table'>
+                    <thead class="thead-light">
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">NAME</th>
+                        <th scope="col">TYPE</th>
+                        <th scope="col">BUYING PRICE</th>
+                        <th scope="col">SELLING PRICE</th>
+                        <th scope="col">STOCK</th>
+                        <th scope="col">ACTION</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
+                  <button type="button" class="btn btn-primary">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editInventoryModal">
+            Edit Inventory
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="editInventoryModal" tabindex="-1" role="dialog"
+            aria-labelledby="editInventoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editInventoryModalLabel">Edit Inventory</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="editInventory">Edit Inventory</label>
+                      <input type="text" class="form-control" id="editInventory" placeholder="Enter Stock">
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
+                  <button type="button" class="btn btn-primary">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+            Delete Inventory
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="stock">Stock</label>
+                      <input type="text" class="form-control" id="stock" placeholder="Enter Stock">
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
+                  <button type="button" class="btn btn-primary">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </td>
+      </tr>
+    </tbody>
+</div>
+
+{% endblock%}
+

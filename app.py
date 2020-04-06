@@ -1,5 +1,5 @@
 # importing
-from flask import Flask
+from flask import Flask,render_template
 
 #instanciating a class
 app=Flask(__name__)
@@ -11,21 +11,28 @@ app=Flask(__name__)
 def helloWorld():
     return "<h1>Welcome to web development</h1>"
 
-@app.route('/home')
-def home():
-    return "<h1>Welcome Home</h1>"
+@app.route('/index')
+def index():
+    return render_template('index.html')
 
 @app.route('/about')
 def about():
-    return "<h1>Welcome to the about page</h1>"
+    return render_template('about.html')
 
-@app.route('/contact_us')
-def contactUs():
-    return "<h1>Welcome to the contact us page</h1>"
+@app.route('/contact')
+def contacts():
+    return render_template('contact.html')
 
-@app.route('/services')
-def services():
-    return "<h1>Welcome to the  services page</h1>"
+@app.route('/service')
+def service():
+    return render_template('service.html')
+
+@app.route('/inventory')
+def inventory():
+    return render_template('inventory.html')
+
+
+
 
 @app.route('/name/<name>')
 def my_name(name):

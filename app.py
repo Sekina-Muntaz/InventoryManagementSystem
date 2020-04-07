@@ -1,5 +1,5 @@
 # importing
-from flask import Flask,render_template
+from flask import Flask,render_template, request, redirect,url_for
 
 #instanciating a class
 app=Flask(__name__)
@@ -7,11 +7,11 @@ app=Flask(__name__)
 # creating of endpoints
 # 1. declaration of the route
 # 2. A function embedded
-@app.route('/')
-def helloWorld():
-    return "<h1>Welcome to web development</h1>"
+# @app.route('/')
+# def helloWorld():
+#     return "<h1>Welcome to web development</h1>"
 
-@app.route('/index')
+@app.route('/')
 def index():
     return render_template('index.html')
 
@@ -27,8 +27,18 @@ def contacts():
 def service():
     return render_template('service.html')
 
-@app.route('/inventory')
+@app.route('/inventory',methods=['GET','POST'])
 def inventory():
+
+    # receive from a form
+    if request.method=="POST":
+        # print('worked')
+        name=request.form['name']
+
+        print(name)
+        return redirect(url_for('inventory'))
+
+
     return render_template('inventory.html')
 
 

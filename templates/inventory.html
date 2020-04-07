@@ -7,7 +7,8 @@ INVENTORIES
 {% block content%}
 <div class="container">
   <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addInventoryModal" style="margin-top: 30px;">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addInventoryModal"
+    style="margin-top: 30px;">
     Add new Inventory
   </button>
 
@@ -24,16 +25,32 @@ INVENTORIES
         </div>
         <!-- add inventory table -->
         <div class="modal-body">
+          <!-- 
+            1. Change save button type to submit
+            2. Add action and method attribute to form
+            a.GET-used to display information to browser
+            -its not a must to specify a get request, all browsers have built in get request
 
-          <form>
+            B.POST-to send info
+            -it must be declared  for it be used
+            -All forms must be given a post before submission
+            C.PUT-to update info
+            D.DELETE-to delete
+            -- ACTION --
+            -what to do once someone clicks save
+            3. Add a name attribute to all fields(input,select, etc)
+           -->
+           
+          <form action="{{url_for('inventory')}} " method="POST">
             <div class="form-group">
               <label for="name">Name</label>
-              <input type="text" class="form-control" id="name">
+
+              <input name="name" type="text" class="form-control" id="name">
 
             </div>
             <div class="form-group">
               <label for="type">Type</label>
-              <select class="form-control" id="type">
+              <select name="type" class="form-control" id="type">
                 <option>Product</option>
                 <option>Service</option>
 
@@ -41,20 +58,22 @@ INVENTORIES
             </div>
             <div class="form-group">
               <label for="buyingPrice">Buying Price</label>
-              <input type="password" class="form-control" id="buyingPrice">
+              <input name="buyingPrice" type="text" class="form-control" id="buyingPrice">
             </div>
             <div class="form-group">
               <label for="sellingPrice">Selling Price</label>
-              <input type="password" class="form-control" id="sellingPrice">
+              <input name="sellingPrice" type="text" class="form-control" id="sellingPrice">
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
             </div>
 
 
           </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
+        
       </div>
     </div>
   </div>
@@ -95,7 +114,7 @@ INVENTORIES
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="stockLabel">Modal title</h5>
+                  <h5 class="modal-title" id="stockLabel">Add Stock</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -154,7 +173,7 @@ INVENTORIES
           <!-- Modal -->
           <div class="modal fade" id="viewSale" tabindex="-1" role="dialog" aria-labelledby="viewSaleLabel"
             aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-xl" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="viewSaleModalLabel">View Sale</h5>
@@ -175,6 +194,7 @@ INVENTORIES
                         <th scope="col">ACTION</th>
                       </tr>
                     </thead>
+
                   </table>
                 </div>
                 <div class="modal-footer">
@@ -203,10 +223,30 @@ INVENTORIES
                 <div class="modal-body">
                   <form>
                     <div class="form-group">
-                      <label for="editInventory">Edit Inventory</label>
-                      <input type="text" class="form-control" id="editInventory" placeholder="Enter Stock">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control" id="name">
+
                     </div>
+                    <div class="form-group">
+                      <label for="type">Type</label>
+                      <select class="form-control" id="type">
+                        <option>Product</option>
+                        <option>Service</option>
+
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="buyingPrice">Buying Price</label>
+                      <input type="password" class="form-control" id="buyingPrice">
+                    </div>
+                    <div class="form-group">
+                      <label for="sellingPrice">Selling Price</label>
+                      <input type="password" class="form-control" id="sellingPrice">
+                    </div>
+
+
                   </form>
+
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
@@ -253,4 +293,3 @@ INVENTORIES
 </div>
 
 {% endblock%}
-

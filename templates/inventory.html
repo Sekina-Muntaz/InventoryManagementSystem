@@ -40,7 +40,7 @@ INVENTORIES
             -what to do once someone clicks save
             3. Add a name attribute to all fields(input,select, etc)
            -->
-           
+
           <form action="{{url_for('inventory')}} " method="POST">
             <div class="form-group">
               <label for="name">Name</label>
@@ -50,9 +50,9 @@ INVENTORIES
             </div>
             <div class="form-group">
               <label for="type">Type</label>
-              <select name="type" class="form-control" id="type">
-                <option>Product</option>
-                <option>Service</option>
+              <select name="invType" class="form-control" id="invType">
+                <option>Fruit</option>
+                <option>Vegetable</option>
 
               </select>
             </div>
@@ -73,7 +73,7 @@ INVENTORIES
 
           </form>
         </div>
-        
+
       </div>
     </div>
   </div>
@@ -120,20 +120,23 @@ INVENTORIES
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form>
+                  <form action="{{url_for('addStock')}}" method="POST">
                     <div class="form-group">
                       <label for="stock">Stock</label>
-                      <input type="text" class="form-control" id="stock" placeholder="Enter Stock">
+                      <input name="stock" type="text" class="form-control" id="stock" placeholder="Enter Stock">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-primary">Add</button>
                     </div>
                   </form>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
-                  <button type="button" class="btn btn-primary">Cancel</button>
-                </div>
+
               </div>
             </div>
           </div>
+
+
           <!-- Button trigger modal -->
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSale">
             Add Sale
@@ -151,17 +154,18 @@ INVENTORIES
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form>
+                  <form action="{{url_for('addSale')}}" method="POST">
                     <div class="form-group">
                       <label for="addInventory">Quantity</label>
-                      <input type="number" class="form-control" id="addInventory" placeholder="Enter Quantity">
+                      <input name="sale" type="number" class="form-control" id="sale" placeholder="Enter Quantity">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-primary">Add</button>
                     </div>
                   </form>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
-                  <button type="button" class="btn btn-primary">Cancel</button>
-                </div>
+
               </div>
             </div>
           </div>
@@ -221,37 +225,43 @@ INVENTORIES
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form>
+                  <form action="{{url_for('editInv')}} " method="POST">
                     <div class="form-group">
                       <label for="name">Name</label>
-                      <input type="text" class="form-control" id="name">
+
+                      <input name="name" type="text" class="form-control" id="name">
 
                     </div>
                     <div class="form-group">
                       <label for="type">Type</label>
-                      <select class="form-control" id="type">
-                        <option>Product</option>
-                        <option>Service</option>
+                      <select name="invType" class="form-control" id="invType">
+                        <option>Fruit</option>
+                        <option>Vegetable</option>
 
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="buyingPrice">Buying Price</label>
-                      <input type="password" class="form-control" id="buyingPrice">
+                      <input name="buyingPrice" type="text" class="form-control" id="buyingPrice">
                     </div>
                     <div class="form-group">
                       <label for="sellingPrice">Selling Price</label>
-                      <input type="password" class="form-control" id="sellingPrice">
+                      <input name="sellingPrice" type="text" class="form-control" id="sellingPrice">
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Save</button>
                     </div>
 
 
                   </form>
 
                 </div>
-                <div class="modal-footer">
+                <!-- <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
                   <button type="button" class="btn btn-primary">Cancel</button>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

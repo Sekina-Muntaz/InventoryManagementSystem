@@ -103,23 +103,70 @@ def data_visualization():
     # add components to piechart
     pieChart.title="Corona Virus in Kenya"
     #  Partitioning your pie chart
-    pieChart.add('Mombasa',60)
-    pieChart.add('Nairobi',140)
-    pieChart.add('Kilifi',100)
-    pieChart.add('Kwale',50)
-    pieChart.add('Mombasa',80)
 
-    pieData=pieChart.render_data_uri()
+
+    # my_pie_data = [
+    # {'Nairobi':50},
+    # {'Mombasa': 50}
+
+    
+    
+    # ]
+
+    # for each in my_pie_data:
+    #     for key, value in each.items():
+    #         pieChart.add(key,value)
+    
+    # pieChart.add('Nairobi',140)
+    # pieChart.add('Kilifi',100)
+    # pieChart.add('Kwale',50)
+    # pieChart.add('Mombasa',80)
+    my_pie_data = [
+        ('Nairobi', 63),
+        ('Mombasa', 20),
+        ('Kilifi', 17),
+        ('Machakos', 30),
+        ('Kiambu', 7)
+    ]
+    for each in my_pie_data:
+        pieChart.add(each[0],each[1])
+
+        pieData=pieChart.render_data_uri()
 
 
     # line graph
+        data = [
+            {'month': 'January', 'total': 22},
+            {'month': 'February', 'total': 27},
+            {'month': 'March', 'total': 23},
+            {'month': 'April', 'total': 20},
+            {'month': 'May', 'total': 12},
+            {'month': 'June', 'total': 32},
+            {'month': 'July', 'total': 42},
+            {'month': 'August', 'total': 72},
+            {'month': 'September', 'total': 52},
+            {'month': 'October', 'total': 42},
+            {'month': 'November', 'total': 92},
+            {'month': 'December', 'total': 102}
+        ]
+        a=[]
+        b=[]
+        for each in data:
+            x=each["month"]
+            y=each["total"]
+            a.append(x)
+            b.append(y)
+        
+
+    
+
     line_chart = pygal.Line()
-    line_chart.title = 'Browser usage evolution (in %)'
-    line_chart.x_labels = map(str, range(2002, 2013))
-    line_chart.add('Firefox', [None, None,    0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
-    line_chart.add('Chrome',  [None, None, None, None, None, None,    0,  3.9, 10.8, 23.8, 35.3])
-    line_chart.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
-    line_chart.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
+    line_chart.title = 'Total Sales'
+    line_chart.x_labels = a
+    line_chart.add('TotalSales', b)
+    # line_chart.add('Chrome',  [None, None, None, None, None, None,    0,  3.9, 10.8, 23.8, 35.3])
+    # line_chart.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
+    # line_chart.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
 
     lineData=line_chart.render_data_uri()
 

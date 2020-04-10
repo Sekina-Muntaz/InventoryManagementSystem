@@ -1,6 +1,25 @@
 # importing
 from flask import Flask,render_template, request, redirect,url_for
 import pygal
+import psycopg2
+'''
+two ways of connecting to db in flask
+1. psycopg2-use sql statement
+2. flask sql alchemy- use orm(object relational mapper)
+
+psycopg2 is a python library
+HOW TO USE IT
+1. install it
+2. set it up
+-username
+-pwd
+-port
+-root
+-dbname
+3. Connect using cursor
+4. Execute an sql statement
+5. Fetch your records
+'''
 
 #instanciating a class
 app=Flask(__name__)
@@ -98,10 +117,32 @@ def editInv():
     return render_template('inventory.html')
 @app.route('/data_visualization')
 def data_visualization():
+
+    conn=psycopg2.connect("dbname='inventory_management_system' user='postgres' host='localhost' port='5432' password='root'")
+
+    cur=conn.cursor()
+
+    cur.execute("""
+    
+    SELECT type,COUNT(type)
+	FROM public.inventories
+	GROUP BY type;
+
+
+    """)
+    fruit_vegetable=cur.fetchall()
+    print(fruit_vegetable)
+
+
+
+
+
+
+
     # initializing pie chart
     pieChart=pygal.Pie()
     # add components to piechart
-    pieChart.title="Corona Virus in Kenya"
+    pieChart.title="Distribution of Fruits and Vegetables"
     #  Partitioning your pie chart
 
 
@@ -121,39 +162,51 @@ def data_visualization():
     # pieChart.add('Kilifi',100)
     # pieChart.add('Kwale',50)
     # pieChart.add('Mombasa',80)
-    my_pie_data = [
-        ('Nairobi', 63),
-        ('Mombasa', 20),
-        ('Kilifi', 17),
-        ('Machakos', 30),
-        ('Kiambu', 7)
-    ]
-    for each in my_pie_data:
+    
+    # my_pie_data = [
+    #     ('Nairobi', 63),
+    #     ('Mombasa', 20),
+    #     ('Kilifi', 17),
+    #     ('Machakos', 30),
+    #     ('Kiambu', 7)
+    # ]
+    for each in fruit_vegetable:
         pieChart.add(each[0],each[1])
 
         pieData=pieChart.render_data_uri()
 
 
     # line graph
-        data = [
-            {'month': 'January', 'total': 22},
-            {'month': 'February', 'total': 27},
-            {'month': 'March', 'total': 23},
-            {'month': 'April', 'total': 20},
-            {'month': 'May', 'total': 12},
-            {'month': 'June', 'total': 32},
-            {'month': 'July', 'total': 42},
-            {'month': 'August', 'total': 72},
-            {'month': 'September', 'total': 52},
-            {'month': 'October', 'total': 42},
-            {'month': 'November', 'total': 92},
-            {'month': 'December', 'total': 102}
-        ]
-        a=[]
-        b=[]
-        for each in data:
-            x=each["month"]
-            y=each["total"]
+    cur.execute("""
+    SELECT EXTRACT(MONTH FROM s.created_at)as sale_date,sum(i.selling_price*s.quantity) as total_sales
+	FROM public.sales as s
+	JOIN public.inventories as i on i.id=s.inv_id
+	GROUP BY sale_date 
+	ORDER BY sale_date ;
+    
+    
+    """)
+    monthlySales=cur.fetchall()
+    print(monthlySales)
+        # data = [
+        #     {'month': 'January', 'total': 22},
+        #     {'month': 'February', 'total': 27},
+        #     {'month': 'March', 'total': 23},
+        #     {'month': 'April', 'total': 20},
+        #     {'month': 'May', 'total': 12},
+        #     {'month': 'June', 'total': 32},
+        #     {'month': 'July', 'total': 42},
+        #     {'month': 'August', 'total': 72},
+        #     {'month': 'September', 'total': 52},
+        #     {'month': 'October', 'total': 42},
+        #     {'month': 'November', 'total': 92},
+        #     {'month': 'December', 'total': 102}
+        # ]
+    a=[]
+    b=[]
+    for each in monthlySales:
+            x=each[0]
+            y=each[1]
             a.append(x)
             b.append(y)
         

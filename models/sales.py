@@ -1,8 +1,14 @@
 from app import db
-class salesModel(db.Model):
+from datetime import datetime
+class SalesModel(db.Model):
     __tablename__="new_sales"
-
     id=db.Column(db.Integer,primary_key=True)
-    quantity=db.Column(db.Integer,nullable=False)
-    inv_id=db.Column(db.Integer,nullable=False)
-    created_at=db.Column(db.DateTime,nullable=False)
+    quantity=db.Column(db.Integer)
+    inv_id=db.Column(db.Integer,db.ForeignKey("new_inventories.id"))
+    created_at=db.Column(db.DateTime,default=datetime.utcnow)
+
+
+    '''in the child model:
+        - we store the FK and describe it (tablename and which column)
+        '''
+

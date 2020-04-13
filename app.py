@@ -79,9 +79,10 @@ db=SQLAlchemy(app)
 #     return "<h1>Welcome to web development</h1>"
 
 # creating tables
-from models.inventory import InventoryModel
+from models.inventory import inventoryModel
 from models.sales import SalesModel
 from models.stock import StocksModel
+
 
 @app.before_first_request
 def create_table():

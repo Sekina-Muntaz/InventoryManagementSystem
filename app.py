@@ -2,6 +2,8 @@
 from flask import Flask,render_template, request, redirect,url_for
 import pygal
 import psycopg2
+from flask_sqlalchemy import SQLAlchemy
+from config.config import Development,Production
 '''
 two ways of connecting to db in flask
 1. psycopg2-use sql statement
@@ -21,8 +23,53 @@ HOW TO USE IT
 5. Fetch your records
 '''
 
+'''
+FLASK-SQLALCHEMY
+    Library that helps us write classes object to communicate to our database without
+    writing sql statements
+
+    EXAMPLE 
+    INSERT INTO sales VALUES (inv_id=1, quantity=10, created=now())
+
+    create a class and it SalesModel
+    then create function that inserts records
+    then insert
+
+    class SalesModel():
+        def insert_sales(self):
+            db.session.add()
+        
+    query
+
+        def query_sales(self):
+            self.query.all()
+
+        select * from sales
+
+
+    STEPS TO USE FLASK-SQLALCHEMY
+    1. install it
+    2. use it
+        - create a connection to the db
+        - load configurations
+        - create an instance of FLASK-SQLALCHEMY by passing in the app
+'''
+
 #instanciating a class
 app=Flask(__name__)
+# load config for flask sql alchemy
+app.config.from_object(Development)
+'''
+requirements
+database://user:pwd@host:port/databasename
+'''
+
+
+# Instanciate sql alchemy
+# comes with functions and helpers to create tables
+db=SQLAlchemy(app)
+
+
 
 # creating of endpoints
 # 1. declaration of the route
@@ -30,6 +77,23 @@ app=Flask(__name__)
 # @app.route('/')
 # def helloWorld():
 #     return "<h1>Welcome to web development</h1>"
+
+# creating tables
+from models.inventory import InventoryModel
+from models.sales import SalesModel
+from models.stock import StocksModel
+
+@app.before_first_request
+def create_table():
+    db.create_all()
+
+
+
+
+
+
+
+
 
 @app.route('/')
 def index():
@@ -132,6 +196,7 @@ def data_visualization():
     """)
     fruit_vegetable=cur.fetchall()
     print(fruit_vegetable)
+    
 
 
 

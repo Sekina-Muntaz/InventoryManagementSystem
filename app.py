@@ -235,8 +235,12 @@ SELECT st.inv_id,sum(quantity) as quantity
 
 
     return render_template('inventory.html')
-@app.route('/editInv', methods=['POST','GET'])
-def editInv():
+@app.route('/editInv/<inv_id>', methods=['POST','GET'])
+def editInv(inv_id):
+    record=inventoryModel.query.filter_by(id=inv_id).first()
+
+    
+
     if request.method=='POST':
         name=request.form['name']
         invType=request.form['invType']
@@ -247,6 +251,14 @@ def editInv():
         print(invType)
         print(sellingPrice)
         print(buyingPrice)
+
+        if record:
+            record.name=name 
+            record.inv_type=invType
+            record.buying_price=buyingPrice
+            record.selling_price=sellingPrice
+
+        db.session.commit()
 
         return redirect(url_for('inventory'))
     
@@ -269,6 +281,18 @@ def view_sales(inv_id):
 
 
     return render_template('view_sales.html', sales=sales,inv=inv,totals=totals)
+@app.route('/delete,<inv_id>')
+def delete(inv_id):
+    record=inventoryModel.query.filter_by(id=inv_id).first()
+
+    if record:
+        db.session.delete(record)
+        db.session.commit()
+    else:
+        print("Record doesn't exist")
+    
+    return redirect(url_for('inventory'))
+    
 
 @app.route('/data_visualization')
 def data_visualization():

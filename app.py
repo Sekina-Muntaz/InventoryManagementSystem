@@ -4,6 +4,7 @@ import pygal
 import psycopg2
 from flask_sqlalchemy import SQLAlchemy
 from config.config import Development,Production
+
 '''
 two ways of connecting to db in flask
 1. psycopg2-use sql statement
@@ -69,8 +70,10 @@ database://user:pwd@host:port/databasename
 # comes with functions and helpers to create tables
 db=SQLAlchemy(app)
 
+# creating db connection with psychopg2
+conn=psycopg2.connect("dbname='inventory_management_system' user='postgres' host='localhost' port='5432' password='root'")
 
-
+cur=conn.cursor()
 # creating of endpoints
 # 1. declaration of the route
 # 2. A function embedded
@@ -84,14 +87,10 @@ from models.sales import SalesModel
 from models.stock import StocksModel
 
 
+
 @app.before_first_request
 def create_table():
     db.create_all()
-
-
-
-
-
 
 
 
@@ -114,6 +113,32 @@ def service():
 
 @app.route('/inventory',methods=['GET','POST'])
 def inventory():
+    # querying records from db
+    inventories=inventoryModel.query.all()
+
+    remaining_stock=getStock()
+    # print(inventories)
+#     cur.execute("""
+
+#     SELECT inv_id,sum(quantity) as remainingstock
+# FROM 
+# (SELECT s.inv_id, -sum(quantity) as quantity
+# 	FROM public.new_sales as s
+# 	group by inv_id
+	
+# 	UNION ALL
+# SELECT st.inv_id,sum(quantity) as quantity
+	
+# 	FROM public.new_stocks as st
+# 	group by inv_id)
+# 	as new_tables
+# GROUP BY inv_id
+# ORDER BY inv_id
+
+
+#     """)
+#     remaining_stock=cur.fetchall()
+    
 
     # receive from a form
     if request.method=="POST":
@@ -124,37 +149,85 @@ def inventory():
         buyingPrice=request.form['buyingPrice']
         
 
-        print(name)
-        print(invType)
-        print(sellingPrice)
-        print(buyingPrice)
+            
+                    # to add to database, assign value in form to colum name in database eg (column name)inv_type=(form field)invType
+        new_inv=inventoryModel(name=name,inv_type=invType,buying_price=buyingPrice,selling_price=sellingPrice)
+        new_inv.add_inventories()
+       
     
         return redirect(url_for('inventory'))
 
 
-    return render_template('inventory.html')
-@app.route('/addStock', methods=['GET','POST'])
-def addStock():
+    return render_template('inventory.html',inventories=inventories, remaining_stock=remaining_stock)
+@app.route('/addStock/<inv_id>', methods=['GET','POST'])
+def addStock(inv_id):
+    print(inv_id)
 
     # # receive from a form
     if request.method=="POST":
         # print('worked')
         stock=request.form['stock']
-        
 
-        print(stock)
+        new_stock=StocksModel(inv_id=inv_id,quantity=stock)
+        new_stock.add_stock()
+        # print(new_stock)
+
+        # print(stock)
     
         return redirect(url_for('inventory'))
 
 
     return render_template('inventory.html')
-@app.route('/addSale',methods=['POST','GET'])
-def addSale():
+@app.route('/addSale/<inv_id>',methods=['POST','GET'])
+def addSale(inv_id):
+
+    # new_sale=SalesModel.query.all()
+    # remaining_stock=getStock()
+    # print(remaining_stock, "ghbjkml,;.")
+
     if request.method=="POST":
-        sale=request.form['sale']
+        quantity=request.form['quantity']
+        
+        new_sale=SalesModel(inv_id=inv_id,quantity=quantity)
+
+        cur.execute(f""" 
+
+           SELECT inv_id,sum(quantity) as remainingstock
+FROM 
+(SELECT s.inv_id, -sum(quantity) as quantity
+	FROM public.new_sales as s
+	group by inv_id
+	
+	UNION ALL
+SELECT st.inv_id,sum(quantity) as quantity
+	
+	FROM public.new_stocks as st
+	group by inv_id)
+	as new_tables
+	where inv_id={inv_id}
+
+    GROUP BY inv_id;
+
+    
+        
+        """)
+        st=cur.fetchall()
+        print(st)
+
+        if st[0][1]>int(quantity):
+            new_sale.add_quantity()
+        else:
+            return "Check your value"
         
 
-        print(sale)
+        
+
+
+        
+
+    
+        
+        
        
 
         return redirect(url_for('inventory'))
@@ -180,12 +253,25 @@ def editInv():
     
     
     return render_template('inventory.html')
+@app.route('/view_sales,<inv_id>')
+def view_sales(inv_id):
+    inv=inventoryModel.query.filter_by(id=inv_id).first()
+    sales=SalesModel.getSalesById(inv_id)
+    totalSales=0
+    for each in sales:
+        quantity=each.quantity
+    
+
+    totals=inv.selling_price*quantity
+    print(totals)
+
+    
+
+
+    return render_template('view_sales.html', sales=sales,inv=inv,totals=totals)
+
 @app.route('/data_visualization')
 def data_visualization():
-
-    conn=psycopg2.connect("dbname='inventory_management_system' user='postgres' host='localhost' port='5432' password='root'")
-
-    cur=conn.cursor()
 
     cur.execute("""
     
@@ -294,12 +380,6 @@ def data_visualization():
     return render_template('chart.html',pie=pieData,line=lineData)
 
 
-    
-
-
-
-
-
 @app.route('/name/<name>')
 def my_name(name):
     return f"<h1>My name is {name}</h1>"
@@ -329,6 +409,38 @@ def multiply(num1,num2):
 @app.route('/my_story/<name>/<age>/<town>')
 def myStory(name,age,town):
     return f"<h1>My name is {name}, I am {age} years old, I come from {town} town</h1>"
+
+
+def getStock():
+    cur.execute("""
+     SELECT inv_id,sum(quantity) as remainingstock
+FROM 
+(SELECT s.inv_id, -sum(quantity) as quantity
+	FROM public.new_sales as s
+	group by inv_id
+	
+	UNION ALL
+SELECT st.inv_id,sum(quantity) as quantity
+	
+	FROM public.new_stocks as st
+	group by inv_id)
+	as new_tables
+GROUP BY inv_id
+ORDER BY inv_id
+    
+
+
+
+
+    """)
+    remaining_stock=cur.fetchall()
+
+    return remaining_stock
+
+      
+
+    
+
 
     
     

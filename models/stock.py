@@ -6,4 +6,8 @@ class StocksModel(db.Model):
     quantity=db.Column(db.Integer)
     inv_id=db.Column(db.Integer, db.ForeignKey("new_inventories.id"))
     created_at=db.Column(db.DateTime,default=datetime.utcnow )
+
+    def add_stock(self):
+        db.session.add(self)
+        db.session.commit()
     

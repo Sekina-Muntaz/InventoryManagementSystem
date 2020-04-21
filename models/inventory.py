@@ -20,4 +20,16 @@ class inventoryModel(db.Model):
         - it is always advisable to place the relationship() inside the parent model for easy reference
 
     '''
+    # Static methods
+    def add_inventories(self):
+        db.session.add(self)
+        db.session.commit()
+
+    # # class methods
+    # def fetch_all_inventories(cls):
+    #     return cls.query.all
+        
+
+
+        
     

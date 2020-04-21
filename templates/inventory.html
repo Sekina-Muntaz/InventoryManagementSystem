@@ -83,6 +83,7 @@ INVENTORIES
 <div style="margin-top: 30px;">
   <table class="table" id="invTable">
     <thead class="thead-dark">
+      
       <tr>
         <th scope="col">ID</th>
         <th scope="col">NAME</th>
@@ -95,22 +96,35 @@ INVENTORIES
     </thead>
     <tbody>
       <!-- sample row -->
+      {% set counter= namespace(value=1)%}
+      {% for inv in inventories %}
+    
       <tr>
-        <th scope="row">1</th>
-        <td>Bread</td>
-        <td>Product</td>
-        <td>45.00</td>
-        <td>50.00</td>
-        <td> 40</td>
+        <th scope="row">{{counter.value}}</th>
+        <td>{{inv.name}}</td>
+        <td>{{inv.inv_type}}</td>
+        <td>{{inv.buying_price}}</td>
+        <td>{{inv.selling_price}}</td>
+        <td> {% for each in remaining_stock %}
+              {% if each[0]==inv.id %}
+
+                  {{each[1]}}
+                
+
+
+              {% endif %}
+         
+              {% endfor %}
+        </td>
         <!-- actions -->
         <td>
           <!-- Button trigger modal -->
-          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#stock">
+          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#stock{{inv.id}}">
             Add Stock
           </button>
 
           <!-- Modal -->
-          <div class="modal fade" id="stock" tabindex="-1" role="dialog" aria-labelledby="stock" aria-hidden="true">
+          <div class="modal fade" id="stock{{inv.id}}" tabindex="-1" role="dialog" aria-labelledby="stock" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -120,7 +134,7 @@ INVENTORIES
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form action="{{url_for('addStock')}}" method="POST">
+                  <form action="{{url_for('addStock',inv_id=inv.id)}}" method="POST">
                     <div class="form-group">
                       <label for="stock">Stock</label>
                       <input name="stock" type="text" class="form-control" id="stock" placeholder="Enter Stock">
@@ -138,12 +152,12 @@ INVENTORIES
 
 
           <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSale">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSale{{inv.id}}">
             Add Sale
           </button>
 
           <!-- Modal -->
-          <div class="modal fade" id="addSale" tabindex="-1" role="dialog" aria-labelledby="addSaleLabel"
+          <div class="modal fade" id="addSale{{inv.id}}" tabindex="-1" role="dialog" aria-labelledby="addSaleLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
@@ -154,10 +168,10 @@ INVENTORIES
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form action="{{url_for('addSale')}}" method="POST">
+                  <form action="{{url_for('addSale',inv_id=inv.id)}}" method="POST">
                     <div class="form-group">
                       <label for="addInventory">Quantity</label>
-                      <input name="sale" type="number" class="form-control" id="sale" placeholder="Enter Quantity">
+                      <input name="quantity" type="number" class="form-control" id="quantity" placeholder="Enter Quantity">
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -169,45 +183,16 @@ INVENTORIES
               </div>
             </div>
           </div>
-          <!-- Button trigger modal -->
-          <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#viewSale">
-            View Sale
-          </button>
+          <a href="{{url_for('view_sales', inv_id=inv.id)}}">
+            <button type="button" class="btn btn-warning" >
+              View Sale
+            </button>
 
-          <!-- Modal -->
-          <div class="modal fade" id="viewSale" tabindex="-1" role="dialog" aria-labelledby="viewSaleLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="viewSaleModalLabel">View Sale</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <table class='table'>
-                    <thead class="thead-light">
-                      <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">NAME</th>
-                        <th scope="col">TYPE</th>
-                        <th scope="col">BUYING PRICE</th>
-                        <th scope="col">SELLING PRICE</th>
-                        <th scope="col">STOCK</th>
-                        <th scope="col">ACTION</th>
-                      </tr>
-                    </thead>
+          </a>
+          
 
-                  </table>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
-                  <button type="button" class="btn btn-primary">Cancel</button>
-                </div>
-              </div>
-            </div>
-          </div>
+      
+          
           <!-- Button trigger modal -->
           <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editInventoryModal">
             Edit Inventory
@@ -299,6 +284,9 @@ INVENTORIES
 
         </td>
       </tr>
+      {% set counter.value=counter.value+1 %}
+      {%endfor%}
+      
     </tbody>
 </div>
 

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+{% block content %}
+
+
+<table class="table">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">NAME</th>
+            <th scope="col">QUANTITY</th>
+            <th scope="col">SOLD AT</th>
+            <th scope="col">SELLING PRICE(KSH)</th>
+            <th scope="col">Total(ksh)</th>
+    
+          </tr>
+    </thead>
+    <tbody>
+        {% set counter= namespace(value=1)%}
+        <tr>
+            
+            {% for each in sales %}
+
+            <th scope="row">{{counter.value}}</th>
+            <td>{{inv.name}}</td>
+            <td>{{each.quantity}}</td>
+            <td>{{each.created_at}}</td>
+            <td>{{inv.selling_price}}</td>
+            <td>{{totals}}</td>
+            
+        </tr>
+        {% set counter.value=counter.value+1 %}
+        {% endfor %}
+      
+
+    </tbody>
+</table>
+<h1>Total sales</h1>
+
+
+
+
+
+
+
+
+{% endblock %}
